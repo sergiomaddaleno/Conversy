@@ -28,7 +28,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // STATE
   // =========================
-  let currentTool = 0;
+  let currentTool = Number(localStorage.getItem('tool')) || 0;
 
   function clearApp() {
     app.innerHTML = '';
@@ -65,23 +65,20 @@ window.addEventListener('DOMContentLoaded', () => {
 
     button.textContent = t(tool.key);
 
-    // 👉 highlight activo
     if (index === currentTool) {
       button.classList.add('active');
     }
 
     button.addEventListener('click', () => {
       currentTool = index;
+
+      localStorage.setItem('tool', currentTool);
+
       renderApp();
     });
 
     menu.appendChild(button);
   });
-
-  // 👉 mostrar tool actual arriba
-  if (activeToolLabel) {
-    activeToolLabel.textContent = `📌 ${t(tools[currentTool].key)}`;
-  }
 
   tools[currentTool].load(app);
 

@@ -11,6 +11,21 @@ body {
 }
 
 /* ======================
+   FOOTER
+====================== */
+
+.footer {
+  margin-top: 50px;
+  padding: 20px;
+  text-align: center;
+
+  color: #64748b;
+  font-size: 13px;
+
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ======================
    LAYOUT
 ====================== */
 
