@@ -103,6 +103,27 @@ window.addEventListener('DOMContentLoaded', () => {
 
   });
 
+  // COOKIES
+  // =========================
+  if (!localStorage.getItem('cookiesAccepted')) {
+
+    cookieBanner.style.display = 'block';
+
+  } else {
+
+    cookieBanner.style.display = 'none';
+  }
+
+  acceptCookies.addEventListener('click', () => {
+
+    localStorage.setItem(
+      'cookiesAccepted',
+      'true'
+    );
+
+    cookieBanner.style.display = 'none';
+  });
+
   // INIT
   // =========================
   updateLangUI();
