@@ -1,16 +1,16 @@
 import { t } from '../language/lang_manager.js';
 
-export function loadImageToPdfTool(parent) {
+export function loadPNGToJpgTool(parent) {
 
   const card = document.createElement('div');
   card.className = 'card';
 
   card.innerHTML = `
-    <h2>${t('image_to_pdf_title')}</h2>
+    <h2>${t('png_to_jpg_title')}</h2>
 
     <label class="file-upload">
       ${t('select_image')}
-      <input type="file" id="imgInput" accept="image/*" />
+      <input type="file" id="imgInput" accept=".png,image/png" />
     </label>
 
     <p id="fileName">${t('no_file')}</p>
@@ -25,8 +25,8 @@ export function loadImageToPdfTool(parent) {
       border:1px solid #334155;
     "/>
 
-    <button id="convertBtn" style="display:none; margin-top:15px;">
-      ${t('convert_pdf')}
+    <button id="convertBtn" style="display:none;">
+      ${t('convert_jpg')}
     </button>
   `;
 
@@ -34,15 +34,15 @@ export function loadImageToPdfTool(parent) {
 
   const input = card.querySelector('#imgInput');
   const fileName = card.querySelector('#fileName');
-  const preview = card.querySelector('#preview');
   const status = card.querySelector('#status');
+  const preview = card.querySelector('#preview');
   const btn = card.querySelector('#convertBtn');
 
   let currentImage = null;
-  let originalName = 'image'; // 👈 fallback
+  let baseName = 'image';
 
   // =========================
-  // SELECT IMAGE
+  // FILE SELECT + PREVIEW
   // =========================
   input.addEventListener('change', () => {
 
@@ -52,8 +52,8 @@ export function loadImageToPdfTool(parent) {
 
     fileName.textContent = file.name;
 
-    // 👉 guardar nombre SIN extensión
-    originalName = file.name.replace(/\.[^/.]+$/, '');
+    // 👉 quitar extensión
+    baseName = file.name.replace(/\.[^/.]+$/, '');
 
     status.textContent = '';
     btn.style.display = 'none';
@@ -78,7 +78,7 @@ export function loadImageToPdfTool(parent) {
   });
 
   // =========================
-  // CONVERT
+  // CONVERT TO JPG
   // =========================
   btn.addEventListener('click', () => {
 
@@ -86,16 +86,27 @@ export function loadImageToPdfTool(parent) {
 
     status.textContent = t('converting');
 
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
 
-    const width = pdf.internal.pageSize.getWidth();
-    const height = (currentImage.height * width) / currentImage.width;
+    canvas.width = currentImage.width;
+    canvas.height = currentImage.height;
 
-    pdf.addImage(currentImage, 'JPEG', 0, 0, width, height);
+    // fondo blanco
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 👉 usar nombre original
-    pdf.save(`${originalName}.pdf`);
+    ctx.drawImage(currentImage, 0, 0);
+
+    const jpgUrl = canvas.toDataURL('image/jpeg', 1.0);
+
+    const link = document.createElement('a');
+    link.href = jpgUrl;
+
+    // 👉 RESPETAR NOMBRE ORIGINAL
+    link.download = `${baseName}.jpg`;
+
+    link.click();
 
     status.textContent = t('done');
   });

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +8,31 @@
 
   <link rel="stylesheet" href="assets/style.css">
 
-  <!-- jsPDF (IMPORTANTE: global, no import ES module) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1721364558213403" crossorigin="anonymous"> </script>
-  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script> pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"; </script>
+
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>Conversy</h1>
-    <p>Herramientas simples online</p>
+  <!-- LANG SWITCH -->
+  <div class="lang-switch">
+    <button data-lang="es">ES</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="fr">FR</button>
+  </div>
 
-    <!-- AQUÍ SE INYECTAN LAS TOOLS -->
+  <div class="container">
+
+    <h1>Conversy</h1>
+    <p id="subtitle"></p>
+
+    <p id="activeTool" class="active-tool"></p>
+
+    <div class="menu" id="menu"></div>
+
     <div id="app"></div>
 
   </div>
