@@ -11,68 +11,6 @@ body {
 }
 
 /* ======================
-   FOOTER
-====================== */
-
-.footer {
-  margin-top: 150px;
-  padding: 20px;
-  text-align: center;
-
-  color: #64748b;
-  font-size: 13px;
-
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-
-/* ======================
-   COOKIES
-====================== */
-
-.cookie-banner {
-  display: none;
-
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  width: 90%;
-  max-width: 700px;
-
-  background: #1e293b;
-
-  border: 1px solid #334155;
-  border-radius: 14px;
-
-  padding: 16px 20px;
-
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-
-  z-index: 9999;
-}
-
-.cookie-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.cookie-content p {
-  margin: 0;
-  color: #cbd5e1;
-  font-size: 14px;
-}
-
-.cookie-content button {
-  width: auto;
-  margin: 0;
-  padding: 10px 18px;
-}
-
-/* ======================
    LAYOUT
 ====================== */
 
@@ -97,6 +35,58 @@ p {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+}
+
+/* ======================
+   FOOTER
+====================== */
+
+.footer {
+  margin-top: 150px;
+  padding: 20px;
+  text-align: center;
+  color: #64748b;
+  font-size: 13px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ======================
+   COOKIES
+====================== */
+
+.cookie-banner {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 700px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 16px 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  z-index: 9999;
+}
+
+.cookie-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.cookie-content p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.cookie-content button {
+  width: auto;
+  margin: 0;
+  padding: 10px 18px;
 }
 
 /* ======================
@@ -153,16 +143,13 @@ input[type="file"] {
   justify-content: center;
   align-items: center;
   gap: 10px;
-
   width: fit-content;
   margin: 0 auto;
-
   padding: 12px 18px;
   background: #0f172a;
   border: 1px dashed #475569;
   border-radius: 10px;
   cursor: pointer;
-
   color: #cbd5e1;
   font-weight: 500;
   transition: 0.2s;
@@ -191,14 +178,11 @@ button {
   margin-top: 15px;
   width: 100%;
   padding: 12px;
-
   border: none;
   border-radius: 10px;
-
   background: linear-gradient(135deg, #3b82f6, #6366f1);
   color: white;
   font-weight: bold;
-
   cursor: pointer;
   transition: 0.2s;
 }
@@ -212,14 +196,15 @@ button:active {
   transform: translateY(0px);
 }
 
-/* MENU BUTTONS */
+/* ======================
+   MENU
+====================== */
 
 .menu {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
-
   margin-bottom: 30px;
   flex-wrap: wrap;
 }
@@ -227,17 +212,12 @@ button:active {
 .menu-button {
   width: auto;
   margin-top: 0;
-
   padding: 10px 18px;
-
   background: #1e293b;
   border: 1px solid rgba(255,255,255,0.05);
-
   border-radius: 10px;
-
   color: white;
   font-weight: 500;
-
   cursor: pointer;
 }
 
@@ -259,7 +239,6 @@ button:active {
   position: absolute;
   top: 20px;
   right: 20px;
-
   display: flex;
   gap: 8px;
 }
@@ -268,10 +247,8 @@ button:active {
   background: #1e293b;
   border: 1px solid #334155;
   color: #cbd5e1;
-
   padding: 6px 10px;
   border-radius: 8px;
-
   cursor: pointer;
   font-weight: bold;
   transition: 0.2s;
@@ -287,4 +264,77 @@ button:active {
   background: #3b82f6;
   color: white;
   border-color: #3b82f6;
+}
+
+/* =========================================================
+   RESPONSIVE (MÓVIL)
+========================================================= */
+
+@media (max-width: 768px) {
+
+  body {
+    padding: 16px;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  /* App layout */
+  #app {
+    display: block;
+  }
+
+  /* Card full width */
+  .card {
+    max-width: 100%;
+    padding: 18px;
+    border-radius: 12px;
+  }
+
+  /* Menu scroll horizontal */
+  .menu {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+  }
+
+  .menu-button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  /* Buttons easier to tap */
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  /* Language switch fixes */
+  .lang-switch {
+    position: static;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  /* Cookie banner stacking */
+  .cookie-content {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .cookie-content button {
+    width: 100%;
+  }
 }
