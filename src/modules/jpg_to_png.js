@@ -1,4 +1,5 @@
 import { t } from '../language/lang_manager.js';
+import { downloadFile } from '../utils/download_manager.js';
 
 export function loadJpgToPngTool(parent) {
 
@@ -95,32 +96,8 @@ export function loadJpgToPngTool(parent) {
 
     canvas.toBlob((blob) => {
 
-      const url = URL.createObjectURL(blob);
-
-      const isMobile =
-        /Android|iPhone|iPad|iPod/i.test(
-          navigator.userAgent
-        );
-
-      if (isMobile) {
-
-        // móvil: abrir en nueva pestaña (evita bloqueos)
-        window.open(url, '_blank');
-
-      } else {
-
-        // desktop: descarga normal
-        const link = document.createElement('a');
-
-        link.href = url;
-        link.download = `${baseName}.png`;
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-
-      URL.revokeObjectURL(url);
+      // 🔥 USAMOS EL SISTEMA UNIFICADO
+      downloadFile(blob, `${baseName}.png`);
 
       status.textContent = t('done');
 

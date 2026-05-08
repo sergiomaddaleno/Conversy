@@ -1,4 +1,5 @@
 import { t } from '../language/lang_manager.js';
+import { downloadFile } from '../utils/downloadManager.js';
 
 export function loadPdfToImagesTool(parent) {
 
@@ -37,7 +38,7 @@ export function loadPdfToImagesTool(parent) {
   let baseName = 'page';
 
   // =========================
-  // FILE SELECT
+  // LOAD PDF
   // =========================
   input.addEventListener('change', async () => {
 
@@ -77,9 +78,6 @@ export function loadPdfToImagesTool(parent) {
           viewport
         }).promise;
 
-        // =========================
-        // PNG SAFE EXPORT (BLOB)
-        // =========================
         const blob = await new Promise(resolve =>
           canvas.toBlob(resolve, 'image/png')
         );
@@ -113,7 +111,7 @@ export function loadPdfToImagesTool(parent) {
   });
 
   // =========================
-  // DOWNLOAD ALL (MOBILE SAFE)
+  // DOWNLOAD ALL (FIXED)
   // =========================
   downloadBtn.addEventListener('click', async () => {
 
@@ -124,25 +122,22 @@ export function loadPdfToImagesTool(parent) {
 
     if (isMobile) {
 
-      // móvil: abrir una por una (evita bloqueo de múltiples downloads)
+      // 🔥 descarga secuencial (evita bloqueos)
       for (const img of images) {
 
-        window.open(img.url, '_blank');
+        downloadFile(img.blob, img.name);
+
+        // pequeño delay para evitar bloqueo del navegador
+        await new Promise(r => setTimeout(r, 300));
       }
 
     } else {
 
-      // desktop: descarga normal múltiple
+      // desktop normal
       images.forEach(img => {
 
-        const a = document.createElement('a');
+        downloadFile(img.blob, img.name);
 
-        a.href = img.url;
-        a.download = img.name;
-
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
       });
     }
   });

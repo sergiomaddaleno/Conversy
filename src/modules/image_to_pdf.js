@@ -1,4 +1,5 @@
 import { t } from '../language/lang_manager.js';
+import { downloadFile } from '../utils/downloadManager.js';
 
 export function loadImageToPdfTool(parent) {
 
@@ -77,7 +78,7 @@ export function loadImageToPdfTool(parent) {
   });
 
   // =========================
-  // CONVERT
+  // CONVERT IMAGE → PDF
   // =========================
   btn.addEventListener('click', () => {
 
@@ -93,37 +94,12 @@ export function loadImageToPdfTool(parent) {
 
     pdf.addImage(currentImage, 'JPEG', 0, 0, width, height);
 
-    // =========================
-    // MOBILE SAFE DOWNLOAD FIX
-    // =========================
-
     const blob = pdf.output('blob');
-    const url = URL.createObjectURL(blob);
 
-    const isMobile =
-      /Android|iPhone|iPad|iPod/i.test(
-        navigator.userAgent
-      );
-
-    if (isMobile) {
-
-      // móvil: abrir en nueva pestaña (más fiable)
-      window.open(url, '_blank');
-
-    } else {
-
-      // desktop: descarga normal
-      const a = document.createElement('a');
-
-      a.href = url;
-      a.download = `${originalName}.pdf`;
-
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-
-    URL.revokeObjectURL(url);
+    // =========================
+    // FIXED DOWNLOAD SYSTEM
+    // =========================
+    downloadFile(blob, `${originalName}.pdf`);
 
     status.textContent = t('done');
   });
