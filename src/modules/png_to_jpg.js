@@ -42,7 +42,7 @@ export function loadPNGToJpgTool(parent) {
   let baseName = 'image';
 
   // =========================
-  // FILE SELECT + PREVIEW
+  // FILE SELECT
   // =========================
   input.addEventListener('change', () => {
 
@@ -52,7 +52,6 @@ export function loadPNGToJpgTool(parent) {
 
     fileName.textContent = file.name;
 
-    // 👉 quitar extensión
     baseName = file.name.replace(/\.[^/.]+$/, '');
 
     status.textContent = '';
@@ -78,7 +77,7 @@ export function loadPNGToJpgTool(parent) {
   });
 
   // =========================
-  // CONVERT TO JPG
+  // CONVERT PNG → JPG
   // =========================
   btn.addEventListener('click', () => {
 
@@ -92,22 +91,46 @@ export function loadPNGToJpgTool(parent) {
     canvas.width = currentImage.width;
     canvas.height = currentImage.height;
 
-    // fondo blanco
+    // fondo blanco (importante para JPG)
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.drawImage(currentImage, 0, 0);
 
-    const jpgUrl = canvas.toDataURL('image/jpeg', 1.0);
+    // =========================
+    // SAFE EXPORT (BLOB)
+    // =========================
+    canvas.toBlob((blob) => {
 
-    const link = document.createElement('a');
-    link.href = jpgUrl;
+      const url = URL.createObjectURL(blob);
 
-    // 👉 RESPETAR NOMBRE ORIGINAL
-    link.download = `${baseName}.jpg`;
+      const isMobile =
+        /Android|iPhone|iPad|iPod/i.test(
+          navigator.userAgent
+        );
 
-    link.click();
+      if (isMobile) {
 
-    status.textContent = t('done');
+        // móvil: abrir en nueva pestaña (evita bloqueos)
+        window.open(url, '_blank');
+
+      } else {
+
+        // desktop: descarga normal
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = `${baseName}.jpg`;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      URL.revokeObjectURL(url);
+
+      status.textContent = t('done');
+
+    }, 'image/jpeg', 1.0);
   });
 }

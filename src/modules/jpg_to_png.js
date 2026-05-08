@@ -42,7 +42,7 @@ export function loadJpgToPngTool(parent) {
   let baseName = 'image';
 
   // =========================
-  // FILE SELECT + PREVIEW
+  // FILE SELECT
   // =========================
   input.addEventListener('change', () => {
 
@@ -52,7 +52,6 @@ export function loadJpgToPngTool(parent) {
 
     fileName.textContent = file.name;
 
-    // 👉 nombre sin extensión
     baseName = file.name.replace(/\.[^/.]+$/, '');
 
     status.textContent = '';
@@ -94,16 +93,37 @@ export function loadJpgToPngTool(parent) {
 
     ctx.drawImage(currentImage, 0, 0);
 
-    const pngUrl = canvas.toDataURL('image/png');
+    canvas.toBlob((blob) => {
 
-    const link = document.createElement('a');
-    link.href = pngUrl;
+      const url = URL.createObjectURL(blob);
 
-    // 👉 RESPETA NOMBRE ORIGINAL
-    link.download = `${baseName}.png`;
+      const isMobile =
+        /Android|iPhone|iPad|iPod/i.test(
+          navigator.userAgent
+        );
 
-    link.click();
+      if (isMobile) {
 
-    status.textContent = t('done');
+        // móvil: abrir en nueva pestaña (evita bloqueos)
+        window.open(url, '_blank');
+
+      } else {
+
+        // desktop: descarga normal
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = `${baseName}.png`;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      URL.revokeObjectURL(url);
+
+      status.textContent = t('done');
+
+    }, 'image/png');
   });
 }

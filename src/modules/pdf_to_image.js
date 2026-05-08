@@ -37,7 +37,7 @@ export function loadPdfToImagesTool(parent) {
   let baseName = 'page';
 
   // =========================
-  // SELECT FILE
+  // FILE SELECT
   // =========================
   input.addEventListener('change', async () => {
 
@@ -47,7 +47,6 @@ export function loadPdfToImagesTool(parent) {
 
     fileName.textContent = file.name;
 
-    // 👉 guardar nombre sin extensión
     baseName = file.name.replace(/\.[^/.]+$/, '');
 
     status.textContent = t('converting');
@@ -78,12 +77,23 @@ export function loadPdfToImagesTool(parent) {
           viewport
         }).promise;
 
-        const imgData = canvas.toDataURL('image/png');
+        // =========================
+        // PNG SAFE EXPORT (BLOB)
+        // =========================
+        const blob = await new Promise(resolve =>
+          canvas.toBlob(resolve, 'image/png')
+        );
 
-        images.push(imgData);
+        const imgUrl = URL.createObjectURL(blob);
+
+        images.push({
+          blob,
+          url: imgUrl,
+          name: `${baseName}_page_${pageNum}.png`
+        });
 
         const img = document.createElement('img');
-        img.src = imgData;
+        img.src = imgUrl;
         img.style.width = '100%';
         img.style.marginTop = '10px';
 
@@ -96,25 +106,44 @@ export function loadPdfToImagesTool(parent) {
       downloadBtn.style.display = 'block';
 
     } catch (err) {
+
       console.error(err);
       status.textContent = t('error_converting');
     }
   });
 
   // =========================
-  // DOWNLOAD ALL
+  // DOWNLOAD ALL (MOBILE SAFE)
   // =========================
-  downloadBtn.addEventListener('click', () => {
+  downloadBtn.addEventListener('click', async () => {
 
-    images.forEach((img, i) => {
+    const isMobile =
+      /Android|iPhone|iPad|iPod/i.test(
+        navigator.userAgent
+      );
 
-      const a = document.createElement('a');
-      a.href = img;
+    if (isMobile) {
 
-      // 👉 nombre basado en el PDF original
-      a.download = `${baseName}_page_${i + 1}.png`;
+      // móvil: abrir una por una (evita bloqueo de múltiples downloads)
+      for (const img of images) {
 
-      a.click();
-    });
+        window.open(img.url, '_blank');
+      }
+
+    } else {
+
+      // desktop: descarga normal múltiple
+      images.forEach(img => {
+
+        const a = document.createElement('a');
+
+        a.href = img.url;
+        a.download = img.name;
+
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    }
   });
 }
