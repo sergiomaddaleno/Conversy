@@ -39,7 +39,7 @@ export function loadJpgToPngTool(parent) {
   const preview = card.querySelector('#preview');
   const btn = card.querySelector('#convertBtn');
 
-  let currentImage = null;
+  let img = null;
   let baseName = 'image';
 
   // =========================
@@ -52,7 +52,6 @@ export function loadJpgToPngTool(parent) {
     const file = input.files[0];
 
     fileName.textContent = file.name;
-
     baseName = file.name.replace(/\.[^/.]+$/, '');
 
     status.textContent = '';
@@ -62,12 +61,12 @@ export function loadJpgToPngTool(parent) {
 
     reader.onload = (e) => {
 
-      currentImage = new Image();
-      currentImage.src = e.target.result;
+      img = new Image();
+      img.src = e.target.result;
 
-      currentImage.onload = () => {
+      img.onload = () => {
 
-        preview.src = currentImage.src;
+        preview.src = img.src;
         preview.style.display = 'block';
 
         btn.style.display = 'block';
@@ -78,29 +77,27 @@ export function loadJpgToPngTool(parent) {
   });
 
   // =========================
-  // CONVERT JPG → PNG
+  // CONVERT JPG → PNG (NO BLOB)
   // =========================
   btn.addEventListener('click', () => {
 
-    if (!currentImage) return;
+    if (!img) return;
 
     status.textContent = t('converting');
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    canvas.width = currentImage.width;
-    canvas.height = currentImage.height;
+    canvas.width = img.width;
+    canvas.height = img.height;
 
-    ctx.drawImage(currentImage, 0, 0);
+    ctx.drawImage(img, 0, 0);
 
-    canvas.toBlob((blob) => {
+    // 🔥 SIN BLOB → usamos DATAURL directamente
+    const pngUrl = canvas.toDataURL('image/png');
 
-      // 🔥 USAMOS EL SISTEMA UNIFICADO
-      downloadFile(blob, `${baseName}.png`);
+    downloadFile(pngUrl, `${baseName}.png`);
 
-      status.textContent = t('done');
-
-    }, 'image/png');
+    status.textContent = t('done');
   });
 }
