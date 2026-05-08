@@ -1,5 +1,5 @@
 import { t } from '../language/lang_manager.js';
-import { downloadFile } from '../utils/downloadManager.js';
+import { downloadFile } from '../utils/download_manager.js';
 
 export function loadImageToPdfTool(parent) {
 
