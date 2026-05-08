@@ -2,67 +2,155 @@
 <html lang="es">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="google-site-verification" content="VSyieJN-70pmN_mheKWoLhkMSptG5csUPzCUyFpVWkM" />
 
+  <!-- MOBILE -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- GOOGLE -->
+  <meta name="google-site-verification"
+    content="VSyieJN-70pmN_mheKWoLhkMSptG5csUPzCUyFpVWkM" />
+
+  <!-- SEO -->
   <title>Conversy - Converter online</title>
-  <meta name="description" content="Convert images, PDFs and files online for free. JPG, PNG, PDF and more.">
 
+  <meta name="description"
+    content="Convert images, PDFs and files online for free. JPG, PNG, PDF and more.">
+
+  <!-- ICON -->
   <link rel="icon" type="image/png" href="./assets/converticon.png">
 
+  <!-- CSS -->
   <link rel="stylesheet" href="assets/style.css">
 
+  <!-- JSPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+  <!-- PDF JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
   <script>
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
   </script>
 
-  <script async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1721364558213403"
-    crossorigin="anonymous"></script>
-
 </head>
 
 <body>
 
-  <div class="lang-switch"></div>
+  <!-- LANGUAGE SWITCH -->
+  <div class="lang-switch">
 
+    <button data-lang="es">ES</button>
+    <button data-lang="en">EN</button>
+    <button data-lang="fr">FR</button>
+
+  </div>
+
+  <!-- MAIN -->
   <div class="container">
 
     <h1>Conversy</h1>
 
     <p id="subtitle"></p>
 
+    <p id="activeTool" class="active-tool"></p>
+
+    <!-- MENU -->
     <div class="menu" id="menu"></div>
 
-    <!-- anuncio -->
-    <div class="ad-container">
-
-      <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-client="ca-pub-..."
-        data-ad-slot="1189592651"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
-
-    </div>
-
+    <!-- APP -->
     <div id="app"></div>
 
   </div>
 
-  <footer class="footer">
-  <div class="footer-content">
+  <!-- COOKIE BANNER -->
+  <div id="cookieBanner" class="cookie-banner">
 
-    <p>© 2026 Conversy · Simple online tools</p>
+    <div class="cookie-content">
 
-    <span class="footer-version">v1.0.0</span>
+      <p>
+        This website uses cookies for analytics and ads.
+      </p>
+
+      <button id="acceptCookies">
+        Accept
+      </button>
+
+    </div>
 
   </div>
-</footer>
+
+  <!-- MAIN SCRIPT -->
+  <script type="module" src="src/main.js"></script>
+
+  <!-- ADS SCRIPT -->
+  <script>
+
+    function loadAds() {
+
+      // evitar cargar dos veces
+      if (window.adsLoaded) return;
+
+      window.adsLoaded = true;
+
+      const script = document.createElement('script');
+
+      script.async = true;
+
+      script.src =
+        'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1721364558213403';
+
+      script.crossOrigin = 'anonymous';
+
+      script.onload = () => {
+
+        (adsbygoogle = window.adsbygoogle || []).push({});
+
+      };
+
+      document.head.appendChild(script);
+    }
+
+    // cargar si ya aceptó cookies
+    if (localStorage.getItem('cookiesAccepted')) {
+
+      loadAds();
+
+    }
+
+  </script>
+
+  <!-- GOOGLE ADS -->
+  <div class="ad-container">
+
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-1721364558213403"
+      data-ad-slot="1189592651"
+      data-ad-format="auto"
+      data-full-width-responsive="true">
+    </ins>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+
+    <div class="footer-content">
+
+      <p>
+        © 2026 Conversy · Simple online tools
+      </p>
+
+      <span class="footer-version">
+        v1.0.0
+      </span>
+
+    </div>
+
+  </footer>
 
 </body>
 
