@@ -1,5 +1,4 @@
 import { t } from '../language/lang_manager.js';
-import { downloadFile } from '../utils/download_manager.js';
 
 export function loadJpgToPngTool(parent) {
 
@@ -42,9 +41,6 @@ export function loadJpgToPngTool(parent) {
   let img = null;
   let baseName = 'image';
 
-  // =========================
-  // FILE SELECT
-  // =========================
   input.addEventListener('change', () => {
 
     if (!input.files.length) return;
@@ -77,7 +73,7 @@ export function loadJpgToPngTool(parent) {
   });
 
   // =========================
-  // CONVERT JPG → PNG (NO BLOB)
+  // FIXED CONVERSION
   // =========================
   btn.addEventListener('click', () => {
 
@@ -93,11 +89,21 @@ export function loadJpgToPngTool(parent) {
 
     ctx.drawImage(img, 0, 0);
 
-    // 🔥 SIN BLOB → usamos DATAURL directamente
-    const pngUrl = canvas.toDataURL('image/png');
+    // 🔥 IMPORTANTE: forzar sync seguro
+    requestAnimationFrame(() => {
 
-    downloadFile(pngUrl, `${baseName}.png`);
+      const pngUrl = canvas.toDataURL('image/png');
 
-    status.textContent = t('done');
+      const a = document.createElement('a');
+      a.href = pngUrl;
+      a.download = `${baseName}.png`;
+      a.style.display = 'none';
+
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      status.textContent = t('done');
+    });
   });
 }
