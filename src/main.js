@@ -13,98 +13,232 @@ window.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
   const menu = document.getElementById('menu');
 
-  const tools = [
-    { key: 'image_to_pdf_title', load: loadImageToPdfTool },
-    { key: 'pdf_to_images_title', load: loadPdfToImagesTool },
-    { key: 'jpg_to_png_title', load: loadJpgToPngTool },
-    { key: 'png_to_jpg_title', load: loadPNGToJpgTool }
+  // =========================
+  // CATEGORIES
+  // =========================
+
+  const categories = [
+
+    {
+      name: 'PDF',
+      tools: [
+        {
+          key: 'image_to_pdf_title',
+          load: loadImageToPdfTool
+        },
+        {
+          key: 'pdf_to_images_title',
+          load: loadPdfToImagesTool
+        }
+      ]
+    },
+
+    {
+      name: 'Images',
+      tools: [
+        {
+          key: 'jpg_to_png_title',
+          load: loadJpgToPngTool
+        },
+        {
+          key: 'png_to_jpg_title',
+          load: loadPNGToJpgTool
+        }
+      ]
+    }
+
   ];
 
+  // =========================
   // LANGUAGE INIT
   // =========================
-  const savedLang = localStorage.getItem('lang') || 'es';
 
-  setLanguage(savedLang === 'en' ? english : savedLang === 'fr' ? french : spanish);
+  const savedLang =
+    localStorage.getItem('lang') || 'es';
 
+  setLanguage(
+    savedLang === 'en'
+      ? english
+      : savedLang === 'fr'
+      ? french
+      : spanish
+  );
+
+  // =========================
   // STATE
   // =========================
-  let currentTool = Number(localStorage.getItem('tool')) || 0;
+
+  const savedTool =
+    JSON.parse(localStorage.getItem('tool'));
+
+  let currentCategory =
+    savedTool?.category || 0;
+
+  let currentTool =
+    savedTool?.tool || 0;
+
+  // =========================
+  // HELPERS
+  // =========================
 
   function clearApp() {
+
     app.innerHTML = '';
+
   }
 
   function applyTranslations() {
 
-    const subtitle = document.getElementById('subtitle');
-    if (subtitle) subtitle.textContent = t('subtitle');
+    const subtitle =
+      document.getElementById('subtitle');
 
+    if (subtitle) {
+
+      subtitle.textContent = t('subtitle');
+
+    }
   }
 
   function updateLangUI() {
 
-    const current = localStorage.getItem('lang') || 'es';
+    const current =
+      localStorage.getItem('lang') || 'es';
 
-    document.querySelectorAll('[data-lang]').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === current);
-    });
+    document
+      .querySelectorAll('[data-lang]')
+      .forEach(btn => {
 
+        btn.classList.toggle(
+          'active',
+          btn.dataset.lang === current
+        );
+
+      });
   }
+
+  // =========================
+  // RENDER
+  // =========================
 
   function renderApp() {
 
-  menu.innerHTML = '';
-  clearApp();
+    menu.innerHTML = '';
 
-  const activeToolLabel = document.getElementById('activeTool');
+    clearApp();
 
-  tools.forEach((tool, index) => {
+    categories.forEach((category, categoryIndex) => {
 
-    const button = document.createElement('button');
-    button.className = 'menu-button';
+      // category title
+      const title =
+        document.createElement('div');
 
-    button.textContent = t(tool.key);
+      title.className =
+        'menu-category';
 
-    if (index === currentTool) {
-      button.classList.add('active');
-    }
+      title.textContent =
+        category.name;
 
-    button.addEventListener('click', () => {
-      currentTool = index;
+      menu.appendChild(title);
 
-      localStorage.setItem('tool', currentTool);
+      // tools
+      category.tools.forEach((tool, toolIndex) => {
 
-      renderApp();
+        const button =
+          document.createElement('button');
+
+        button.className =
+          'menu-button';
+
+        button.textContent =
+          t(tool.key);
+
+        if (
+          categoryIndex === currentCategory &&
+          toolIndex === currentTool
+        ) {
+
+          button.classList.add('active');
+
+        }
+
+        button.addEventListener('click', () => {
+
+          currentCategory =
+            categoryIndex;
+
+          currentTool =
+            toolIndex;
+
+          localStorage.setItem(
+            'tool',
+            JSON.stringify({
+              category: currentCategory,
+              tool: currentTool
+            })
+          );
+
+          renderApp();
+
+        });
+
+        menu.appendChild(button);
+
+      });
+
     });
 
-    menu.appendChild(button);
-  });
+    // load current tool
+    categories[currentCategory]
+      .tools[currentTool]
+      .load(app);
 
-  tools[currentTool].load(app);
+    applyTranslations();
+  }
 
-  applyTranslations();
-}
-
+  // =========================
   // LANGUAGE SWITCH
   // =========================
-  document.querySelectorAll('[data-lang]').forEach(btn => {
 
-    btn.addEventListener('click', () => {
+  document
+    .querySelectorAll('[data-lang]')
+    .forEach(btn => {
 
-      const value = btn.dataset.lang;
+      btn.addEventListener('click', () => {
 
-      localStorage.setItem('lang', value);
+        const value =
+          btn.dataset.lang;
 
-      setLanguage(value === 'en' ? english : value === 'fr' ? french : spanish);
+        localStorage.setItem(
+          'lang',
+          value
+        );
 
-      renderApp();
-      updateLangUI();
+        setLanguage(
+          value === 'en'
+            ? english
+            : value === 'fr'
+            ? french
+            : spanish
+        );
+
+        renderApp();
+
+        updateLangUI();
+
+      });
+
     });
 
-  });
-
+  // =========================
   // COOKIES
   // =========================
+
+  const cookieBanner =
+    document.getElementById('cookieBanner');
+
+  const acceptCookies =
+    document.getElementById('acceptCookies');
+
   if (!localStorage.getItem('cookiesAccepted')) {
 
     cookieBanner.style.display = 'block';
@@ -112,6 +246,7 @@ window.addEventListener('DOMContentLoaded', () => {
   } else {
 
     cookieBanner.style.display = 'none';
+
   }
 
   acceptCookies.addEventListener('click', () => {
@@ -122,11 +257,15 @@ window.addEventListener('DOMContentLoaded', () => {
     );
 
     cookieBanner.style.display = 'none';
+
   });
 
+  // =========================
   // INIT
   // =========================
+
   updateLangUI();
+
   renderApp();
 
 });

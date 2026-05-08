@@ -2,12 +2,22 @@
    BASE
 ====================== */
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: system-ui, Arial, sans-serif;
   background: #0f172a;
   margin: 0;
-  padding: 40px;
+  padding: 20px 14px;
   color: white;
+  -webkit-text-size-adjust: 100%;
+}
+
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
 }
 
 /* ======================
@@ -16,25 +26,28 @@ body {
 
 .container {
   max-width: 700px;
-  margin: auto;
+  margin: 0 auto;
   text-align: center;
   position: relative;
+  width: 100%;
 }
 
 h1 {
-  font-size: 32px;
-  margin-bottom: 5px;
+  font-size: clamp(28px, 7vw, 32px);
+  margin-bottom: 6px;
 }
 
 p {
   color: #94a3b8;
-  margin-bottom: 30px;
+  margin-bottom: 22px;
+  line-height: 1.5;
 }
 
 #app {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 16px;
+  width: 100%;
 }
 
 /* ======================
@@ -42,12 +55,20 @@ p {
 ====================== */
 
 .footer {
-  margin-top: 150px;
-  padding: 20px;
+  margin-top: 60px;
+  padding: 16px 10px;
   text-align: center;
   color: #64748b;
   font-size: 13px;
   border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 /* ======================
@@ -57,15 +78,15 @@ p {
 .cookie-banner {
   display: none;
   position: fixed;
-  bottom: 20px;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
+  width: calc(100% - 24px);
   max-width: 700px;
   background: #1e293b;
   border: 1px solid #334155;
   border-radius: 14px;
-  padding: 16px 20px;
+  padding: 14px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
   z-index: 9999;
 }
@@ -74,19 +95,21 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 12px;
 }
 
 .cookie-content p {
   margin: 0;
   color: #cbd5e1;
   font-size: 14px;
+  flex: 1;
 }
 
 .cookie-content button {
   width: auto;
   margin: 0;
-  padding: 10px 18px;
+  padding: 10px 16px;
+  flex-shrink: 0;
 }
 
 /* ======================
@@ -107,7 +130,7 @@ p {
 
 .card {
   background: #1e293b;
-  padding: 25px;
+  padding: 20px;
   border-radius: 16px;
   width: 100%;
   max-width: 420px;
@@ -143,9 +166,9 @@ input[type="file"] {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  width: fit-content;
+  width: 100%;
   margin: 0 auto;
-  padding: 12px 18px;
+  padding: 12px 16px;
   background: #0f172a;
   border: 1px dashed #475569;
   border-radius: 10px;
@@ -153,6 +176,7 @@ input[type="file"] {
   color: #cbd5e1;
   font-weight: 500;
   transition: 0.2s;
+  text-align: center;
 }
 
 .file-upload:hover {
@@ -168,6 +192,7 @@ input[type="file"] {
   margin-top: 10px;
   font-size: 12px;
   color: #94a3b8;
+  word-break: break-word;
 }
 
 /* ======================
@@ -185,6 +210,7 @@ button {
   font-weight: bold;
   cursor: pointer;
   transition: 0.2s;
+  min-height: 44px;
 }
 
 button:hover {
@@ -204,15 +230,15 @@ button:active {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 30px;
+  gap: 10px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
 .menu-button {
   width: auto;
   margin-top: 0;
-  padding: 10px 18px;
+  padding: 10px 16px;
   background: #1e293b;
   border: 1px solid rgba(255,255,255,0.05);
   border-radius: 10px;
@@ -231,27 +257,41 @@ button:active {
   font-weight: bold;
 }
 
+.menu-category {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding-left: 5px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
 /* ======================
    LANGUAGE SWITCH
 ====================== */
 
 .lang-switch {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  position: fixed;
+  top: 12px;
+  right: 12px;
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  z-index: 10000;
 }
 
 .lang-switch button {
   background: #1e293b;
   border: 1px solid #334155;
   color: #cbd5e1;
-  padding: 6px 10px;
+  padding: 8px 10px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
   transition: 0.2s;
+  min-width: 42px;
 }
 
 .lang-switch button:hover {
@@ -266,75 +306,102 @@ button:active {
   border-color: #3b82f6;
 }
 
-/* =========================================================
-   RESPONSIVE (MÓVIL)
-========================================================= */
+/* ======================
+   MOBILE
+====================== */
 
 @media (max-width: 768px) {
-
   body {
-    padding: 16px;
+    padding: 70px 12px 16px;
   }
 
   .container {
-    max-width: 100%;
-    padding: 0 10px;
+    padding-top: 10px;
   }
 
   h1 {
-    font-size: 24px;
+    font-size: 28px;
   }
 
   p {
-    font-size: 14px;
+    margin-bottom: 18px;
+    font-size: 15px;
   }
 
-  /* App layout */
-  #app {
-    display: block;
-  }
-
-  /* Card full width */
-  .card {
-    max-width: 100%;
-    padding: 18px;
-    border-radius: 12px;
-  }
-
-  /* Menu scroll horizontal */
   .menu {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    justify-content: flex-start;
-    padding-bottom: 10px;
+    gap: 8px;
   }
 
   .menu-button {
-    flex: 0 0 auto;
-    white-space: nowrap;
-  }
-
-  /* Buttons easier to tap */
-  button {
+    padding: 10px 14px;
     font-size: 14px;
-    padding: 10px;
   }
 
-  /* Language switch fixes */
-  .lang-switch {
-    position: static;
-    justify-content: center;
-    margin-bottom: 10px;
+  .card {
+    padding: 18px 16px;
+    border-radius: 14px;
   }
 
-  /* Cookie banner stacking */
+  .cookie-banner {
+    width: calc(100% - 16px);
+    bottom: 8px;
+    padding: 12px;
+  }
+
   .cookie-content {
     flex-direction: column;
     align-items: stretch;
-    text-align: center;
   }
 
   .cookie-content button {
     width: 100%;
+  }
+
+  .footer {
+    margin-top: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 64px 10px 12px;
+  }
+
+  .lang-switch {
+    top: 8px;
+    right: 8px;
+    gap: 4px;
+  }
+
+  .lang-switch button {
+    padding: 7px 9px;
+    min-width: 38px;
+    font-size: 12px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+
+  .card {
+    padding: 16px 14px;
+  }
+
+  button {
+    padding: 11px 12px;
+  }
+
+  .file-upload {
+    padding: 11px 12px;
+    font-size: 14px;
+  }
+
+  .menu {
+    gap: 6px;
+  }
+
+  .menu-button {
+    width: 100%;
+    max-width: 160px;
   }
 }
