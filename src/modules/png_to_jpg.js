@@ -1,4 +1,5 @@
 import { t } from '../language/lang_manager.js';
+import { downloadFile } from '../utils/download_manager.js';
 
 export function loadPNGToJpgTool(parent) {
 
@@ -38,12 +39,9 @@ export function loadPNGToJpgTool(parent) {
   const preview = card.querySelector('#preview');
   const btn = card.querySelector('#convertBtn');
 
-  let currentImage = null;
+  let img = null;
   let baseName = 'image';
 
-  // =========================
-  // FILE SELECT
-  // =========================
   input.addEventListener('change', () => {
 
     if (!input.files.length) return;
@@ -54,19 +52,16 @@ export function loadPNGToJpgTool(parent) {
 
     baseName = file.name.replace(/\.[^/.]+$/, '');
 
-    status.textContent = '';
-    btn.style.display = 'none';
-
     const reader = new FileReader();
 
     reader.onload = (e) => {
 
-      currentImage = new Image();
-      currentImage.src = e.target.result;
+      img = new Image();
+      img.src = e.target.result;
 
-      currentImage.onload = () => {
+      img.onload = () => {
 
-        preview.src = currentImage.src;
+        preview.src = img.src;
         preview.style.display = 'block';
 
         btn.style.display = 'block';
@@ -76,58 +71,26 @@ export function loadPNGToJpgTool(parent) {
     reader.readAsDataURL(file);
   });
 
-  // =========================
-  // CONVERT PNG → JPG
-  // =========================
   btn.addEventListener('click', () => {
 
-    if (!currentImage) return;
+    if (!img) return;
 
     status.textContent = t('converting');
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    canvas.width = currentImage.width;
-    canvas.height = currentImage.height;
+    canvas.width = img.width;
+    canvas.height = img.height;
 
-    // fondo blanco (importante para JPG)
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.drawImage(currentImage, 0, 0);
+    ctx.drawImage(img, 0, 0);
 
-    // =========================
-    // SAFE EXPORT (BLOB)
-    // =========================
     canvas.toBlob((blob) => {
 
-      const url = URL.createObjectURL(blob);
-
-      const isMobile =
-        /Android|iPhone|iPad|iPod/i.test(
-          navigator.userAgent
-        );
-
-      if (isMobile) {
-
-        // móvil: abrir en nueva pestaña (evita bloqueos)
-        window.open(url, '_blank');
-
-      } else {
-
-        // desktop: descarga normal
-        const link = document.createElement('a');
-
-        link.href = url;
-        link.download = `${baseName}.jpg`;
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-
-      URL.revokeObjectURL(url);
+      downloadFile(blob, `${baseName}.jpg`);
 
       status.textContent = t('done');
 
