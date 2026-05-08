@@ -39,7 +39,7 @@ export function loadImageToPdfTool(parent) {
   const btn = card.querySelector('#convertBtn');
 
   let currentImage = null;
-  let originalName = 'image'; // 👈 fallback
+  let originalName = 'image';
 
   // =========================
   // SELECT IMAGE
@@ -52,7 +52,6 @@ export function loadImageToPdfTool(parent) {
 
     fileName.textContent = file.name;
 
-    // 👉 guardar nombre SIN extensión
     originalName = file.name.replace(/\.[^/.]+$/, '');
 
     status.textContent = '';
@@ -94,8 +93,37 @@ export function loadImageToPdfTool(parent) {
 
     pdf.addImage(currentImage, 'JPEG', 0, 0, width, height);
 
-    // 👉 usar nombre original
-    pdf.save(`${originalName}.pdf`);
+    // =========================
+    // MOBILE SAFE DOWNLOAD FIX
+    // =========================
+
+    const blob = pdf.output('blob');
+    const url = URL.createObjectURL(blob);
+
+    const isMobile =
+      /Android|iPhone|iPad|iPod/i.test(
+        navigator.userAgent
+      );
+
+    if (isMobile) {
+
+      // móvil: abrir en nueva pestaña (más fiable)
+      window.open(url, '_blank');
+
+    } else {
+
+      // desktop: descarga normal
+      const a = document.createElement('a');
+
+      a.href = url;
+      a.download = `${originalName}.pdf`;
+
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    URL.revokeObjectURL(url);
 
     status.textContent = t('done');
   });
