@@ -39,7 +39,6 @@
 
 <body>
 
-
   <!-- LANGUAGE SWITCH -->
   <div class="lang-switch">
 
@@ -52,13 +51,10 @@
   <!-- MAIN -->
   <div class="container">
 
-    <!-- DESKTOP TITLE -->
     <h1>Conversy</h1>
 
-    <!-- SUBTITLE -->
     <p id="subtitle"></p>
 
-    <!-- ACTIVE TOOL -->
     <p id="activeTool" class="active-tool"></p>
 
     <!-- MENU -->
@@ -89,12 +85,11 @@
   <!-- MAIN SCRIPT -->
   <script type="module" src="src/main.js"></script>
 
-  <!-- ADS SCRIPT -->
+  <!-- ADS -->
   <script>
 
-    function loadAds() {
+    function initAds() {
 
-      // evitar cargar dos veces
       if (window.adsLoaded) return;
 
       window.adsLoaded = true;
@@ -110,19 +105,50 @@
 
       script.onload = () => {
 
-        (adsbygoogle = window.adsbygoogle || []).push({});
+        const ads =
+          document.querySelectorAll('.adsbygoogle');
+
+        ads.forEach(() => {
+
+          try {
+
+            (adsbygoogle = window.adsbygoogle || []).push({});
+
+          } catch (e) {
+
+            console.log(e);
+
+          }
+
+        });
 
       };
 
       document.head.appendChild(script);
     }
 
-    // cargar si ya aceptó cookies
+    // load ads if cookies already accepted
     if (localStorage.getItem('cookiesAccepted')) {
 
-      loadAds();
+      initAds();
 
     }
+
+    // wait for accept button
+    window.addEventListener('DOMContentLoaded', () => {
+
+      const acceptBtn =
+        document.getElementById('acceptCookies');
+
+      if (!acceptBtn) return;
+
+      acceptBtn.addEventListener('click', () => {
+
+        initAds();
+
+      });
+
+    });
 
   </script>
 
@@ -132,25 +158,12 @@
     <ins class="adsbygoogle"
       style="display:block"
       data-ad-client="ca-pub-1721364558213403"
-      data-ad-slot="1189592651"
+      data-ad-slot="9267995861"
       data-ad-format="auto"
       data-full-width-responsive="true">
     </ins>
 
   </div>
-
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1721364558213403"
-     crossorigin="anonymous"></script>
-<!-- 1 -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-1721364558213403"
-     data-ad-slot="9267995861"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
 
   <!-- FOOTER -->
   <footer class="footer">
