@@ -1,5 +1,4 @@
 import { t } from '../../language/lang_manager.js';
-import { downloadFile } from '../../utils/download_manager.js';
 
 export function loadCompressImageTool(parent) {
 
@@ -26,7 +25,7 @@ export function loadCompressImageTool(parent) {
 
     <div style="margin-top:15px; display:none;" id="controls">
 
-      <p style="color:#94a3b8; id="fileName"">${t('quality')}</p>
+      <p style="color:#94a3b8;">${t('quality')}</p>
 
       <input
         type="range"
@@ -124,27 +123,27 @@ export function loadCompressImageTool(parent) {
 
     canvas.toBlob((blob) => {
 
-  if (!blob) {
-    status.textContent = 'Error cropping image';
-    btn.disabled = false;
-    return;
-  }
+      if (!blob) {
+        status.textContent = 'Error compressing image';
+        btn.disabled = false;
+        return;
+      }
 
-  const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob);
 
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${baseName}_cropped.jpg`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${baseName}_compressed.jpg`;
 
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
 
-  setTimeout(() => URL.revokeObjectURL(url), 1500);
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
 
-  status.textContent = t('done');
-  btn.disabled = false;
+      status.textContent = t('done');
+      btn.disabled = false;
 
-}, 'image/jpeg', 1.0);
+    }, 'image/jpeg', q); // 🔥 AQUÍ ESTÁ EL FIX REAL
   });
 }
