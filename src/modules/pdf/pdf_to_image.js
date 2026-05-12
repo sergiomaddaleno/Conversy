@@ -1,5 +1,4 @@
 import { t } from '../../language/lang_manager.js';
-import { downloadFile } from '../../utils/download_manager.js';
 
 export function loadPdfToImagesTool(parent) {
 
@@ -33,7 +32,7 @@ export function loadPdfToImagesTool(parent) {
   const downloadBtn = card.querySelector('#downloadAllBtn');
   const output = card.querySelector('#output');
 
-  const images = [];
+  const pages = [];
   let baseName = 'page';
 
   // =========================
@@ -51,7 +50,7 @@ export function loadPdfToImagesTool(parent) {
     status.textContent = t('converting');
     downloadBtn.style.display = 'none';
     output.innerHTML = '';
-    images.length = 0;
+    pages.length = 0;
 
     try {
 
@@ -74,19 +73,16 @@ export function loadPdfToImagesTool(parent) {
           viewport
         }).promise;
 
-        // 🔥 convert DIRECTLY to blob (no URL needed)
-        const blob = await new Promise(resolve =>
-          canvas.toBlob(resolve, 'image/png')
-        );
+        const imgUrl = canvas.toDataURL('image/png');
 
-        images.push({
-          blob,
+        pages.push({
+          url: imgUrl,
           name: `${baseName}_page_${pageNum}.png`
         });
 
         // preview
         const img = document.createElement('img');
-        img.src = URL.createObjectURL(blob);
+        img.src = imgUrl;
         img.style.width = '100%';
         img.style.marginTop = '10px';
 
@@ -106,22 +102,28 @@ export function loadPdfToImagesTool(parent) {
   });
 
   // =========================
-  // DOWNLOAD ALL (FIXED SYSTEM)
+  // DOWNLOAD ALL
   // =========================
   downloadBtn.addEventListener('click', async () => {
 
-    if (!images.length) return;
+    if (!pages.length) return;
 
     status.textContent = t('downloading');
 
-    for (const img of images) {
+    for (const page of pages) {
 
-      downloadFile(img.blob, img.name);
+      const a = document.createElement('a');
+      a.href = page.url;
+      a.download = page.name;
 
-      // evita bloqueo del navegador
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
       await new Promise(r => setTimeout(r, 250));
     }
 
     status.textContent = t('done');
   });
+
 }
