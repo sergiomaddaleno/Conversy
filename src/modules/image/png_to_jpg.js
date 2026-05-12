@@ -1,5 +1,4 @@
 import { t } from '../../language/lang_manager.js';
-import { downloadFile } from '../../utils/download_manager.js';
 
 export function loadPNGToJpgTool(parent) {
 
@@ -42,6 +41,9 @@ export function loadPNGToJpgTool(parent) {
   let img = null;
   let baseName = 'image';
 
+  // =========================
+  // LOAD IMAGE
+  // =========================
   input.addEventListener('change', () => {
 
     if (!input.files.length) return;
@@ -49,7 +51,6 @@ export function loadPNGToJpgTool(parent) {
     const file = input.files[0];
 
     fileName.textContent = file.name;
-
     baseName = file.name.replace(/\.[^/.]+$/, '');
 
     const reader = new FileReader();
@@ -71,6 +72,9 @@ export function loadPNGToJpgTool(parent) {
     reader.readAsDataURL(file);
   });
 
+  // =========================
+  // CONVERT
+  // =========================
   btn.addEventListener('click', () => {
 
     if (!img) return;
@@ -83,6 +87,7 @@ export function loadPNGToJpgTool(parent) {
     canvas.width = img.width;
     canvas.height = img.height;
 
+    // fondo blanco (PNG transparente → JPG safe)
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -90,7 +95,22 @@ export function loadPNGToJpgTool(parent) {
 
     canvas.toBlob((blob) => {
 
-      downloadFile(blob, `${baseName}.jpg`);
+      if (!blob) {
+        status.textContent = 'Error converting image';
+        return;
+      }
+
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${baseName}.jpg`;
+
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
 
       status.textContent = t('done');
 

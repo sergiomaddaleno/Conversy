@@ -41,6 +41,9 @@ export function loadJpgToPngTool(parent) {
   let img = null;
   let baseName = 'image';
 
+  // =========================
+  // LOAD IMAGE
+  // =========================
   input.addEventListener('change', () => {
 
     if (!input.files.length) return;
@@ -73,7 +76,7 @@ export function loadJpgToPngTool(parent) {
   });
 
   // =========================
-  // FIXED CONVERSION
+  // CONVERT (FIXED SPLIT METHOD)
   // =========================
   btn.addEventListener('click', () => {
 
@@ -89,21 +92,27 @@ export function loadJpgToPngTool(parent) {
 
     ctx.drawImage(img, 0, 0);
 
-    // 🔥 IMPORTANTE: forzar sync seguro
-    requestAnimationFrame(() => {
+    canvas.toBlob((blob) => {
 
-      const pngUrl = canvas.toDataURL('image/png');
+      if (!blob) {
+        status.textContent = 'Error converting image';
+        return;
+      }
+
+      const url = URL.createObjectURL(blob);
 
       const a = document.createElement('a');
-      a.href = pngUrl;
+      a.href = url;
       a.download = `${baseName}.png`;
-      a.style.display = 'none';
 
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
 
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+
       status.textContent = t('done');
-    });
+
+    }, 'image/png');
   });
 }
