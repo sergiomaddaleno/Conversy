@@ -7,6 +7,7 @@ export const french = {
   no_file: "Aucun fichier sélectionné",
   converting: "Conversion en cours...",
   done: "Terminé ✔",
+  images: "Images",
 
   image_to_pdf_title: "Image → PDF",
   png_to_jpg_title: "PNG → JPG",

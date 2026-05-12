@@ -14,42 +14,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const menu = document.getElementById('menu');
 
   // =========================
-  // CATEGORIES
-  // =========================
-
-  const categories = [
-
-    {
-      name: 'PDF',
-      tools: [
-        {
-          key: 'image_to_pdf_title',
-          load: loadImageToPdfTool
-        },
-        {
-          key: 'pdf_to_images_title',
-          load: loadPdfToImagesTool
-        }
-      ]
-    },
-
-    {
-      name: 'Images',
-      tools: [
-        {
-          key: 'jpg_to_png_title',
-          load: loadJpgToPngTool
-        },
-        {
-          key: 'png_to_jpg_title',
-          load: loadPNGToJpgTool
-        }
-      ]
-    }
-
-  ];
-
-  // =========================
   // LANGUAGE INIT
   // =========================
 
@@ -63,6 +27,42 @@ window.addEventListener('DOMContentLoaded', () => {
       ? french
       : spanish
   );
+
+  // =========================
+  // CATEGORIES
+  // =========================
+
+  const categories = [
+
+    {
+      name: 'pdf',
+      tools: [
+        {
+          key: 'image_to_pdf_title',
+          load: loadImageToPdfTool
+        },
+        {
+          key: 'pdf_to_images_title',
+          load: loadPdfToImagesTool
+        }
+      ]
+    },
+
+    {
+      name: 'images',
+      tools: [
+        {
+          key: 'jpg_to_png_title',
+          load: loadJpgToPngTool
+        },
+        {
+          key: 'png_to_jpg_title',
+          load: loadPNGToJpgTool
+        }
+      ]
+    }
+
+  ];
 
   // =========================
   // STATE
@@ -94,9 +94,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (subtitle) {
 
-      subtitle.textContent = t('subtitle');
+      subtitle.textContent =
+        t('subtitle');
 
     }
+
   }
 
   function updateLangUI() {
@@ -114,6 +116,7 @@ window.addEventListener('DOMContentLoaded', () => {
         );
 
       });
+
   }
 
   // =========================
@@ -128,7 +131,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     categories.forEach((category, categoryIndex) => {
 
-      // category title
+      // =========================
+      // CATEGORY TITLE
+      // =========================
+
       const title =
         document.createElement('div');
 
@@ -136,11 +142,14 @@ window.addEventListener('DOMContentLoaded', () => {
         'menu-category';
 
       title.textContent =
-        category.name;
+        t(category.name);
 
       menu.appendChild(title);
 
-      // tools
+      // =========================
+      // TOOLS
+      // =========================
+
       category.tools.forEach((tool, toolIndex) => {
 
         const button =
@@ -187,12 +196,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    // load current tool
+    // =========================
+    // LOAD CURRENT TOOL
+    // =========================
+
     categories[currentCategory]
       .tools[currentTool]
       .load(app);
 
     applyTranslations();
+
   }
 
   // =========================
@@ -241,11 +254,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (!localStorage.getItem('cookiesAccepted')) {
 
-    cookieBanner.style.display = 'block';
+    cookieBanner.style.display =
+      'block';
 
   } else {
 
-    cookieBanner.style.display = 'none';
+    cookieBanner.style.display =
+      'none';
 
   }
 
@@ -256,7 +271,8 @@ window.addEventListener('DOMContentLoaded', () => {
       'true'
     );
 
-    cookieBanner.style.display = 'none';
+    cookieBanner.style.display =
+      'none';
 
   });
 

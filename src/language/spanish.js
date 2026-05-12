@@ -7,6 +7,7 @@ export const spanish = {
   no_file: "Ningún archivo seleccionado",
   converting: "Convirtiendo...",
   done: "Listo ✔",
+  images: "Imágenes",
   
   image_to_pdf_title: "Imagen → PDF",
   png_to_jpg_title: "PNG → JPG",
