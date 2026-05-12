@@ -1,190 +1,101 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <!-- MOBILE -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- GOOGLE -->
-  <meta name="google-site-verification"
-    content="VSyieJN-70pmN_mheKWoLhkMSptG5csUPzCUyFpVWkM" />
+  <meta name="google-site-verification" content="VSyieJN-70pmN_mheKWoLhkMSptG5csUPzCUyFpVWkM" />
 
-  <!-- SEO -->
   <title>Conversy - Converter online</title>
+  <meta name="description" content="Convert images, PDFs and files online for free. JPG, PNG, PDF and more.">
 
-  <meta name="description"
-    content="Convert images, PDFs and files online for free. JPG, PNG, PDF and more.">
-
-  <!-- ICON -->
   <link rel="icon" type="image/png" href="./assets/converticon.png">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="assets/style.css">
 
-  <!-- JSPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-  <!-- PDF JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
   <script>
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
   </script>
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1721364558213403"
-     crossorigin="anonymous"></script>
-
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1721364558213403"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
-
-  <!-- LANGUAGE SWITCH -->
   <div class="lang-switch">
-
     <button data-lang="es">ES</button>
     <button data-lang="en">EN</button>
     <button data-lang="fr">FR</button>
-
   </div>
 
-  <!-- MAIN -->
   <div class="container">
-
     <h1>Conversy</h1>
-
     <p id="subtitle"></p>
-
     <p id="activeTool" class="active-tool"></p>
-
-    <!-- MENU -->
     <div class="menu" id="menu"></div>
-
-    <!-- APP -->
     <div id="app"></div>
 
-  </div>
-
-  <!-- COOKIE BANNER -->
-  <div id="cookieBanner" class="cookie-banner">
-
-    <div class="cookie-content">
-
-      <p>
-        This website uses cookies for analytics and ads.
-      </p>
-
-      <button id="acceptCookies">
-        Accept
-      </button>
-
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-1721364558213403"
+        data-ad-slot="9267995861"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
     </div>
-
   </div>
 
-  <!-- MAIN SCRIPT -->
+  <div id="cookieBanner" class="cookie-banner">
+    <div class="cookie-content">
+      <p>This website uses cookies for analytics and ads.</p>
+      <button id="acceptCookies">Accept</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2026 Conversy · Simple online tools</p>
+      <span class="footer-version">v1.0.0</span>
+    </div>
+  </footer>
+
   <script type="module" src="src/main.js"></script>
 
-  <!-- ADS -->
   <script>
+    function showAd() {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
     function initAds() {
-
-      if (window.adsLoaded) return;
-
-      window.adsLoaded = true;
-
-      const script = document.createElement('script');
-
-      script.async = true;
-
-      script.src =
-        'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1721364558213403';
-
-      script.crossOrigin = 'anonymous';
-
-      script.onload = () => {
-
-        const ads =
-          document.querySelectorAll('.adsbygoogle');
-
-        ads.forEach(() => {
-
-          try {
-
-            (adsbygoogle = window.adsbygoogle || []).push({});
-
-          } catch (e) {
-
-            console.log(e);
-
-          }
-
-        });
-
-      };
-
-      document.head.appendChild(script);
+      if (window.adsInitialized) return;
+      window.adsInitialized = true;
+      showAd();
     }
 
-    // load ads if cookies already accepted
-    if (localStorage.getItem('cookiesAccepted')) {
-
-      initAds();
-
-    }
-
-    // wait for accept button
     window.addEventListener('DOMContentLoaded', () => {
+      const banner = document.getElementById('cookieBanner');
+      const acceptBtn = document.getElementById('acceptCookies');
 
-      const acceptBtn =
-        document.getElementById('acceptCookies');
+      if (localStorage.getItem('cookiesAccepted') === 'true') {
+        banner.style.display = 'none';
+        initAds();
+      }
 
       if (!acceptBtn) return;
 
       acceptBtn.addEventListener('click', () => {
-
+        localStorage.setItem('cookiesAccepted', 'true');
+        banner.style.display = 'none';
         initAds();
-
       });
-
     });
-
   </script>
-
-  <!-- GOOGLE ADS -->
-  <div class="ad-container">
-
-    <ins class="adsbygoogle"
-      style="display:block"
-      data-ad-client="ca-pub-1721364558213403"
-      data-ad-slot="9267995861"
-      data-ad-format="auto"
-      data-full-width-responsive="true">
-    </ins>
-
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-
-    <div class="footer-content">
-
-      <p>
-        © 2026 Conversy · Simple online tools
-      </p>
-
-      <span class="footer-version">
-        v1.0.0
-      </span>
-
-    </div>
-
-  </footer>
-
 </body>
-
 </html>
