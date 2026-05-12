@@ -1,4 +1,4 @@
-import { t } from '../language/lang_manager.js';
+import { t } from '../../language/lang_manager.js';
 
 export function loadJpgToPngTool(parent) {
 

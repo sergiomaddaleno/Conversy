@@ -1,7 +1,7 @@
-import { loadImageToPdfTool } from './modules/image_to_pdf.js';
-import { loadPdfToImagesTool } from './modules/pdf_to_image.js';
-import { loadJpgToPngTool } from './modules/jpg_to_png.js';
-import { loadPNGToJpgTool } from './modules/png_to_jpg.js';
+import { loadImageToPdfTool } from './modules/pdf/image_to_pdf.js';
+import { loadPdfToImagesTool } from './modules/pdf/pdf_to_image.js';
+import { loadJpgToPngTool } from './modules/image/jpg_to_png.js';
+import { loadPNGToJpgTool } from './modules/image/png_to_jpg.js';
 
 import { setLanguage, t } from './language/lang_manager.js';
 import { spanish } from './language/spanish.js';
