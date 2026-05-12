@@ -1,5 +1,4 @@
 import { t } from '../../language/lang_manager.js';
-import { downloadFile } from '../../utils/download_manager.js';
 
 export function loadImageToPdfTool(parent) {
 
@@ -52,7 +51,6 @@ export function loadImageToPdfTool(parent) {
     const file = input.files[0];
 
     fileName.textContent = file.name;
-
     originalName = file.name.replace(/\.[^/.]+$/, '');
 
     status.textContent = '';
@@ -78,7 +76,7 @@ export function loadImageToPdfTool(parent) {
   });
 
   // =========================
-  // CONVERT IMAGE → PDF
+  // CONVERT (SPLIT DOWNLOAD FIX)
   // =========================
   btn.addEventListener('click', () => {
 
@@ -94,12 +92,22 @@ export function loadImageToPdfTool(parent) {
 
     pdf.addImage(currentImage, 'JPEG', 0, 0, width, height);
 
+    // =========================
+    // 🔥 SPLIT STYLE DOWNLOAD (FIXED)
+    // =========================
     const blob = pdf.output('blob');
 
-    // =========================
-    // FIXED DOWNLOAD SYSTEM
-    // =========================
-    downloadFile(blob, `${originalName}.pdf`);
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${originalName}.pdf`;
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
 
     status.textContent = t('done');
   });

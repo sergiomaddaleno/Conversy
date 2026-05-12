@@ -34,7 +34,6 @@ export function loadPdfToImagesTool(parent) {
   const output = card.querySelector('#output');
 
   const images = [];
-
   let baseName = 'page';
 
   // =========================
@@ -47,11 +46,9 @@ export function loadPdfToImagesTool(parent) {
     const file = input.files[0];
 
     fileName.textContent = file.name;
-
     baseName = file.name.replace(/\.[^/.]+$/, '');
 
     status.textContent = t('converting');
-
     downloadBtn.style.display = 'none';
     output.innerHTML = '';
     images.length = 0;
@@ -64,7 +61,6 @@ export function loadPdfToImagesTool(parent) {
       for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
 
         const page = await pdf.getPage(pageNum);
-
         const viewport = page.getViewport({ scale: 2 });
 
         const canvas = document.createElement('canvas');
@@ -78,20 +74,19 @@ export function loadPdfToImagesTool(parent) {
           viewport
         }).promise;
 
+        // 🔥 convert DIRECTLY to blob (no URL needed)
         const blob = await new Promise(resolve =>
           canvas.toBlob(resolve, 'image/png')
         );
 
-        const imgUrl = URL.createObjectURL(blob);
-
         images.push({
           blob,
-          url: imgUrl,
           name: `${baseName}_page_${pageNum}.png`
         });
 
+        // preview
         const img = document.createElement('img');
-        img.src = imgUrl;
+        img.src = URL.createObjectURL(blob);
         img.style.width = '100%';
         img.style.marginTop = '10px';
 
@@ -111,34 +106,22 @@ export function loadPdfToImagesTool(parent) {
   });
 
   // =========================
-  // DOWNLOAD ALL (FIXED)
+  // DOWNLOAD ALL (FIXED SYSTEM)
   // =========================
   downloadBtn.addEventListener('click', async () => {
 
-    const isMobile =
-      /Android|iPhone|iPad|iPod/i.test(
-        navigator.userAgent
-      );
+    if (!images.length) return;
 
-    if (isMobile) {
+    status.textContent = t('downloading');
 
-      // 🔥 descarga secuencial (evita bloqueos)
-      for (const img of images) {
+    for (const img of images) {
 
-        downloadFile(img.blob, img.name);
+      downloadFile(img.blob, img.name);
 
-        // pequeño delay para evitar bloqueo del navegador
-        await new Promise(r => setTimeout(r, 300));
-      }
-
-    } else {
-
-      // desktop normal
-      images.forEach(img => {
-
-        downloadFile(img.blob, img.name);
-
-      });
+      // evita bloqueo del navegador
+      await new Promise(r => setTimeout(r, 250));
     }
+
+    status.textContent = t('done');
   });
 }
