@@ -1,7 +1,12 @@
 import { loadImageToPdfTool } from './modules/pdf/image_to_pdf.js';
 import { loadPdfToImagesTool } from './modules/pdf/pdf_to_image.js';
+import { loadMergePdfTool } from './modules/pdf/merge_pdf.js';
+import { loadSplitPdfTool } from './modules/pdf/split_pdf.js';
+import { loadCompressPdfTool } from './modules/pdf/compress_pdf.js';
+
 import { loadJpgToPngTool } from './modules/image/jpg_to_png.js';
 import { loadPNGToJpgTool } from './modules/image/png_to_jpg.js';
+import { loadCompressImageTool } from './modules/image/compress_image.js';
 
 import { setLanguage, t } from './language/lang_manager.js';
 import { spanish } from './language/spanish.js';
@@ -44,6 +49,18 @@ window.addEventListener('DOMContentLoaded', () => {
         {
           key: 'pdf_to_images_title',
           load: loadPdfToImagesTool
+        },
+        {
+          key: 'merge_pdf_title',
+          load: loadMergePdfTool
+        },
+        {
+          key: 'split_pdf_title',
+          load: loadSplitPdfTool
+        },
+        {
+          key: 'compress_pdf_title',
+          load: loadCompressPdfTool
         }
       ]
     },
@@ -58,6 +75,10 @@ window.addEventListener('DOMContentLoaded', () => {
         {
           key: 'png_to_jpg_title',
           load: loadPNGToJpgTool
+        },
+        {
+          key: 'compress_image_title',
+          load: loadCompressImageTool
         }
       ]
     }
