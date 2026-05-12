@@ -7,6 +7,7 @@ export const french = {
   select_pdfs: "📁 Sélectionner des PDF",
   compress_pdf_title: "Compresser un PDF",
   compress_image_title: "Compresser une image",
+  crop_image_title: "Couper une image",
 
   compress: "Compresser",
   no_file: "Aucun fichier sélectionné",
@@ -15,6 +16,7 @@ export const french = {
   images: "Images",
   download: "Télécharger",
   quality: "Qualité",
+  crop: "Couper",
 
   image_to_pdf_title: "Image → PDF",
   png_to_jpg_title: "PNG → JPG",

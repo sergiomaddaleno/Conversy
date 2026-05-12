@@ -7,6 +7,7 @@ import { loadCompressPdfTool } from './modules/pdf/compress_pdf.js';
 import { loadJpgToPngTool } from './modules/image/jpg_to_png.js';
 import { loadPNGToJpgTool } from './modules/image/png_to_jpg.js';
 import { loadCompressImageTool } from './modules/image/compress_image.js';
+import { loadCropImageTool } from './modules/image/crop_image.js';
 
 import { setLanguage, t } from './language/lang_manager.js';
 import { spanish } from './language/spanish.js';
@@ -79,6 +80,10 @@ window.addEventListener('DOMContentLoaded', () => {
         {
           key: 'compress_image_title',
           load: loadCompressImageTool
+        },
+        {
+          key: 'crop_image_title',
+          load: loadCropImageTool
         }
       ]
     }

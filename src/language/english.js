@@ -8,6 +8,7 @@ export const english = {
   select_pdfs: "📁 Select PDFs",
   compress_pdf_title: "Compress PDF",
   compress_image_title: "Compress image",
+  crop_image_title: "Crop image",
 
   compress: "Compress",
   converting: "Converting...",
@@ -15,6 +16,7 @@ export const english = {
   images: "Images",
   download: "Download",
   quality: "Quality",
+  crop: "Crop",
 
   image_to_pdf_title: "Image → PDF",
   png_to_jpg_title: "PNG → JPG",

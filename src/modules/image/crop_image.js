@@ -1,6 +1,6 @@
 import { t } from '../../language/lang_manager.js';
 
-export function loadCompressImageTool(parent) {
+export function loadCropImageTool(parent) {
 
   const card = document.createElement('div');
   card.className = 'card';
@@ -34,6 +34,10 @@ export function loadCompressImageTool(parent) {
         border:2px dashed #38bdf8;
         background:rgba(56,189,248,0.15);
         cursor:move;
+        left:0;
+        top:0;
+        width:100px;
+        height:100px;
       "></div>
 
     </div>
@@ -81,6 +85,9 @@ export function loadCompressImageTool(parent) {
   let img = null;
   let baseName = 'image';
 
+  // =========================
+  // SCALE FIX
+  // =========================
   let scaleX = 1;
   let scaleY = 1;
 
@@ -96,8 +103,7 @@ export function loadCompressImageTool(parent) {
     cropBox.style.height = (cropH.value * scaleY) + 'px';
   }
 
-  function clampCrop() {
-
+  function clamp() {
     if (!img) return;
 
     let x = +cropX.value;
@@ -123,7 +129,6 @@ export function loadCompressImageTool(parent) {
 
   cropBox.addEventListener('mousedown', (e) => {
     dragging = true;
-
     const rect = cropBox.getBoundingClientRect();
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
@@ -146,9 +151,7 @@ export function loadCompressImageTool(parent) {
     updateBox();
   });
 
-  window.addEventListener('mouseup', () => {
-    dragging = false;
-  });
+  window.addEventListener('mouseup', () => dragging = false);
 
   // =========================
   // LOAD IMAGE
@@ -211,13 +214,13 @@ export function loadCompressImageTool(parent) {
   // =========================
   [cropX, cropY, cropW, cropH].forEach(el => {
     el.addEventListener('input', () => {
-      clampCrop();
+      clamp();
       updateBox();
     });
   });
 
   // =========================
-  // CROP + DOWNLOAD (FIX FINAL)
+  // CROP + FIXED DOWNLOAD (IMPORTANT)
   // =========================
   btn.addEventListener('click', () => {
 
@@ -239,17 +242,32 @@ export function loadCompressImageTool(parent) {
 
     ctx.drawImage(img, x, y, w, h, 0, 0, w, h);
 
-    const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+    // =========================
+    // 🔥 FIX: SAME DOWNLOAD STYLE AS MERGE/COMPRESS PDF
+    // =========================
+    canvas.toBlob((blob) => {
 
-    const a = document.createElement('a');
-    a.href = dataUrl;
-    a.download = `${baseName}_cropped.jpg`;
+      if (!blob) {
+        status.textContent = 'Error cropping image';
+        btn.disabled = false;
+        return;
+      }
 
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+      const url = URL.createObjectURL(blob);
 
-    status.textContent = t('done');
-    btn.disabled = false;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${baseName}_cropped.jpg`;
+
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+
+      status.textContent = t('done');
+      btn.disabled = false;
+
+    }, 'image/jpeg', 1.0);
   });
 }

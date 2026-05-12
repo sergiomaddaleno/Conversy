@@ -7,6 +7,7 @@ export const spanish = {
   select_pdfs: "📁 Seleccionar PDFs",
   compress_pdf_title: "Comprimir PDF",
   compress_image_title: "Comprimir imagen",
+  crop_image_title: "Recortar imagen",
 
   compress: "Comprimir",
   no_file: "Ningún archivo seleccionado",
@@ -15,6 +16,7 @@ export const spanish = {
   images: "Imágenes",
   download: "Descargar",
   quality: "Calidad",
+  crop: "Recortar",
 
   image_to_pdf_title: "Imagen → PDF",
   png_to_jpg_title: "PNG → JPG",
