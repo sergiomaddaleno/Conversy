@@ -39,9 +39,13 @@ export const french = {
   split_pdf_title: "Diviser PDF",
   image_to_pdf_title: "Image → PDF",
   pdf_to_images_title: "PDF → Images",
+  delete_pdf_pages_title: "Supprimer pages PDF",
+  delete_restore: "Supprimer / Restaurer",
 
   convert_pdf: "Convertir en PDF",
   convert_images: "Convertir en image",
+
+  delete_restore : "Supprimer / Restaurer",
 
   // =========================
   // IMAGE TOOLS

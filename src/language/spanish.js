@@ -39,9 +39,13 @@ export const spanish = {
   split_pdf_title: "Dividir PDF",
   image_to_pdf_title: "Imagen → PDF",
   pdf_to_images_title: "PDF → Imágenes",
+  delete_pdf_pages_title: "Eliminar páginas PDF",
+  delete_restore: "Eliminar / Restaurar",
 
   convert_pdf: "Convertir a PDF",
   convert_images: "Convertir a imagen",
+
+  delete_restore : "Eliminar / Restaurar",
 
   // =========================
   // IMAGE TOOLS

@@ -39,9 +39,12 @@ export const english = {
   split_pdf_title: "Split PDF",
   image_to_pdf_title: "Image → PDF",
   pdf_to_images_title: "PDF → Images",
+  delete_pdf_pages_title: "Delete PDF Pages",
 
   convert_pdf: "Convert to PDF",
   convert_images: "Convert to image",
+
+  delete_restore : "Delete / Restore",
 
   // =========================
   // IMAGE TOOLS
