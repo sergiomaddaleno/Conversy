@@ -1,36 +1,66 @@
 export const spanish = {
 
-  subtitle: "Herramientas simples online",
+  // =========================
+  // GENERAL
+  // =========================
+
+  subtitle: "Herramientas online simples",
+
+  converting: "Convirtiendo...",
+  processing: "Procesando...",
+  done: "Hecho ✔",
+  download: "Descargar",
+  download_all: "Descargar todo",
+  generate: "Generar",
+  compress: "Comprimir",
+  crop: "Recortar",
+  quality: "Calidad",
+  images: "Imágenes",
+
+  no_file: "Ningún archivo seleccionado",
+
+  error_converting: "Error al convertir archivo",
+  error_generating: "Error al generar QR",
+
+  // =========================
+  // FILE SELECTION
+  // =========================
 
   select_image: "📁 Seleccionar imagen",
   select_pdf: "📁 Seleccionar PDF",
   select_pdfs: "📁 Seleccionar PDFs",
+
+  // =========================
+  // PDF TOOLS
+  // =========================
+
   compress_pdf_title: "Comprimir PDF",
+  merge_pdf_title: "Unir PDFs",
+  split_pdf_title: "Dividir PDF",
+  image_to_pdf_title: "Imagen → PDF",
+  pdf_to_images_title: "PDF → Imágenes",
+
+  convert_pdf: "Convertir a PDF",
+  convert_images: "Convertir a imagen",
+
+  // =========================
+  // IMAGE TOOLS
+  // =========================
+
   compress_image_title: "Comprimir imagen",
   crop_image_title: "Recortar imagen",
 
-  compress: "Comprimir",
-  no_file: "Ningún archivo seleccionado",
-  converting: "Convirtiendo...",
-  done: "Listo ✔",
-  images: "Imágenes",
-  download: "Descargar",
-  quality: "Calidad",
-  crop: "Recortar",
-
-  image_to_pdf_title: "Imagen → PDF",
   png_to_jpg_title: "PNG → JPG",
   jpg_to_png_title: "JPG → PNG",
-  pdf_to_images_title: "PDF → Imágenes",
-  merge_pdf_title: "Fusionar PDF",
-  split_pdf_title: "Dividir PDF",
 
-  convert_pdf: "Convertir a PDF",
   convert_jpg: "Convertir a JPG",
   convert_png: "Convertir a PNG",
-  convert_images: "Convertir a imágenes",
-  download_all: "Descargar todo",
 
-  error_converting: "Error convirtiendo el archivo"
+  // =========================
+  // QR
+  // =========================
+
+  qr_generator_title: "Generador QR",
+  enter_text_or_url: "Introduce texto o URL"
 
 };

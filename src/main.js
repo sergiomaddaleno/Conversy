@@ -9,6 +9,8 @@ import { loadPNGToJpgTool } from './modules/image/png_to_jpg.js';
 import { loadCompressImageTool } from './modules/image/compress_image.js';
 import { loadCropImageTool } from './modules/image/crop_image.js';
 
+import { loadQrGeneratorTool } from './modules/utilities/qr_generator.js';
+
 import { setLanguage, t } from './language/lang_manager.js';
 import { spanish } from './language/spanish.js';
 import { english } from './language/english.js';
@@ -23,8 +25,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // LANGUAGE INIT
   // =========================
 
-  const savedLang =
-    localStorage.getItem('lang') || 'es';
+  const savedLang = localStorage.getItem('lang') || 'es';
 
   setLanguage(
     savedLang === 'en'
@@ -35,271 +36,191 @@ window.addEventListener('DOMContentLoaded', () => {
   );
 
   // =========================
-  // CATEGORIES
+  // CATEGORIES (NOW WITH IDS)
   // =========================
 
   const categories = [
-
     {
       name: 'pdf',
       tools: [
-        {
-          key: 'image_to_pdf_title',
-          load: loadImageToPdfTool
-        },
-        {
-          key: 'pdf_to_images_title',
-          load: loadPdfToImagesTool
-        },
-        {
-          key: 'merge_pdf_title',
-          load: loadMergePdfTool
-        },
-        {
-          key: 'split_pdf_title',
-          load: loadSplitPdfTool
-        },
-        {
-          key: 'compress_pdf_title',
-          load: loadCompressPdfTool
-        }
+        { id: 'image_to_pdf', key: 'image_to_pdf_title', load: loadImageToPdfTool },
+        { id: 'pdf_to_images', key: 'pdf_to_images_title', load: loadPdfToImagesTool },
+        { id: 'merge_pdf', key: 'merge_pdf_title', load: loadMergePdfTool },
+        { id: 'split_pdf', key: 'split_pdf_title', load: loadSplitPdfTool },
+        { id: 'compress_pdf', key: 'compress_pdf_title', load: loadCompressPdfTool }
       ]
     },
-
     {
       name: 'images',
       tools: [
-        {
-          key: 'jpg_to_png_title',
-          load: loadJpgToPngTool
-        },
-        {
-          key: 'png_to_jpg_title',
-          load: loadPNGToJpgTool
-        },
-        {
-          key: 'compress_image_title',
-          load: loadCompressImageTool
-        },
-        {
-          key: 'crop_image_title',
-          load: loadCropImageTool
-        }
+        { id: 'jpg_to_png', key: 'jpg_to_png_title', load: loadJpgToPngTool },
+        { id: 'png_to_jpg', key: 'png_to_jpg_title', load: loadPNGToJpgTool },
+        { id: 'compress_image', key: 'compress_image_title', load: loadCompressImageTool },
+        { id: 'crop_image', key: 'crop_image_title', load: loadCropImageTool }
+      ]
+    },
+    {
+      name: 'utilities',
+      tools: [
+        { id: 'qr_generator', key: 'qr_generator_title', load: loadQrGeneratorTool }
       ]
     }
-
   ];
 
   // =========================
-  // STATE
+  // ROUTING
   // =========================
 
-  const savedTool =
-    JSON.parse(localStorage.getItem('tool'));
+  const params = new URLSearchParams(window.location.search);
+  let currentToolId = params.get('tool') || 'image_to_pdf';
 
-  let currentCategory =
-    savedTool?.category || 0;
+  function findToolById(id) {
+    for (let c = 0; c < categories.length; c++) {
+      for (let t = 0; t < categories[c].tools.length; t++) {
+        if (categories[c].tools[t].id === id) {
+          return { c, t };
+        }
+      }
+    }
+    return { c: 0, t: 0 };
+  }
 
-  let currentTool =
-    savedTool?.tool || 0;
+  let { c: currentCategory, t: currentTool } = findToolById(currentToolId);
 
   // =========================
   // HELPERS
   // =========================
 
   function clearApp() {
-
     app.innerHTML = '';
-
   }
 
   function applyTranslations() {
-
-    const subtitle =
-      document.getElementById('subtitle');
-
-    if (subtitle) {
-
-      subtitle.textContent =
-        t('subtitle');
-
-    }
-
+    const subtitle = document.getElementById('subtitle');
+    if (subtitle) subtitle.textContent = t('subtitle');
   }
 
   function updateLangUI() {
+    const current = localStorage.getItem('lang') || 'es';
 
-    const current =
-      localStorage.getItem('lang') || 'es';
-
-    document
-      .querySelectorAll('[data-lang]')
-      .forEach(btn => {
-
-        btn.classList.toggle(
-          'active',
-          btn.dataset.lang === current
-        );
-
-      });
-
+    document.querySelectorAll('[data-lang]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === current);
+    });
   }
 
   // =========================
-  // RENDER
+  // RENDER MENU + APP
   // =========================
 
   function renderApp() {
 
     menu.innerHTML = '';
-
     clearApp();
 
     categories.forEach((category, categoryIndex) => {
 
-      // =========================
-      // CATEGORY TITLE
-      // =========================
-
-      const title =
-        document.createElement('div');
-
-      title.className =
-        'menu-category';
-
-      title.textContent =
-        t(category.name);
-
+      const title = document.createElement('div');
+      title.className = 'menu-category';
+      title.textContent = t(category.name);
       menu.appendChild(title);
 
-      // =========================
-      // TOOLS
-      // =========================
+      category.tools.forEach((tool) => {
 
-      category.tools.forEach((tool, toolIndex) => {
+        const button = document.createElement('button');
+        button.className = 'menu-button';
+        button.textContent = t(tool.key);
 
-        const button =
-          document.createElement('button');
-
-        button.className =
-          'menu-button';
-
-        button.textContent =
-          t(tool.key);
-
-        if (
-          categoryIndex === currentCategory &&
-          toolIndex === currentTool
-        ) {
-
+        if (tool.id === currentToolId) {
           button.classList.add('active');
-
         }
 
         button.addEventListener('click', () => {
 
-          currentCategory =
-            categoryIndex;
+          currentToolId = tool.id;
 
-          currentTool =
-            toolIndex;
+          const pos = findToolById(tool.id);
 
-          localStorage.setItem(
-            'tool',
-            JSON.stringify({
-              category: currentCategory,
-              tool: currentTool
-            })
-          );
+          currentCategory = pos.c;
+          currentTool = pos.t;
+
+          // update URL (REAL PAGE SYSTEM)
+          window.history.pushState({}, '', `?tool=${tool.id}`);
 
           renderApp();
-
         });
 
         menu.appendChild(button);
-
       });
-
     });
 
-    // =========================
-    // LOAD CURRENT TOOL
-    // =========================
-
+    // load tool
     categories[currentCategory]
       .tools[currentTool]
       .load(app);
 
     applyTranslations();
-
   }
+
+  // =========================
+  // BACK/FORWARD SUPPORT
+  // =========================
+
+  window.addEventListener('popstate', () => {
+
+    const params = new URLSearchParams(window.location.search);
+    const toolId = params.get('tool') || 'image_to_pdf';
+
+    currentToolId = toolId;
+
+    const pos = findToolById(toolId);
+
+    currentCategory = pos.c;
+    currentTool = pos.t;
+
+    renderApp();
+  });
 
   // =========================
   // LANGUAGE SWITCH
   // =========================
 
-  document
-    .querySelectorAll('[data-lang]')
-    .forEach(btn => {
+  document.querySelectorAll('[data-lang]').forEach(btn => {
 
-      btn.addEventListener('click', () => {
+    btn.addEventListener('click', () => {
 
-        const value =
-          btn.dataset.lang;
+      const value = btn.dataset.lang;
 
-        localStorage.setItem(
-          'lang',
-          value
-        );
+      localStorage.setItem('lang', value);
 
-        setLanguage(
-          value === 'en'
-            ? english
-            : value === 'fr'
-            ? french
-            : spanish
-        );
+      setLanguage(
+        value === 'en'
+          ? english
+          : value === 'fr'
+          ? french
+          : spanish
+      );
 
-        renderApp();
-
-        updateLangUI();
-
-      });
-
+      renderApp();
+      updateLangUI();
     });
+  });
 
   // =========================
   // COOKIES
   // =========================
 
-  const cookieBanner =
-    document.getElementById('cookieBanner');
-
-  const acceptCookies =
-    document.getElementById('acceptCookies');
+  const cookieBanner = document.getElementById('cookieBanner');
+  const acceptCookies = document.getElementById('acceptCookies');
 
   if (!localStorage.getItem('cookiesAccepted')) {
-
-    cookieBanner.style.display =
-      'block';
-
+    cookieBanner.style.display = 'block';
   } else {
-
-    cookieBanner.style.display =
-      'none';
-
+    cookieBanner.style.display = 'none';
   }
 
   acceptCookies.addEventListener('click', () => {
-
-    localStorage.setItem(
-      'cookiesAccepted',
-      'true'
-    );
-
-    cookieBanner.style.display =
-      'none';
-
+    localStorage.setItem('cookiesAccepted', 'true');
+    cookieBanner.style.display = 'none';
   });
 
   // =========================
@@ -307,7 +228,5 @@ window.addEventListener('DOMContentLoaded', () => {
   // =========================
 
   updateLangUI();
-
   renderApp();
-
 });
